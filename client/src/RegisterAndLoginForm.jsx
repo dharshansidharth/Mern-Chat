@@ -18,14 +18,14 @@ const RegisterAndLoginForm = () => {
         e.preventDefault();
         const url = isLoginOrRegister === 'register' ? '/register' : '/login'
         try {
-            console.log('hello')
+            // console.log('hello')
             const { data } = await axios.post(url, { username, password })
-            console.log(data)
-            console.log(data)
+            // console.log(data)
+            // console.log(data)
             setLoggedInUsername(username)
             setId(data.id)
         } catch (error) {
-            console.log(error.response.data)
+            // console.log(error.response.data)
             setErrorMessage(error.response.data.error)
             
         }

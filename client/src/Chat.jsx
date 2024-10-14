@@ -71,19 +71,22 @@ const Chat = () => {
         peopleArray.forEach(({ userId, username }) => {
             people[userId] = username
         })
-        // console.log(people)
         setOnlinePeople(people)
     }
 
 
     const handleMessage = (e) => {
         const messageData = JSON.parse(e.data)
+        // console.log({e , messageData})
         if ('online' in messageData) {
             showOnlinePeople(messageData.online)
         }
         else if('text' in messageData) {
+            // console.log(messageData)
             if(messageData.sender === selectedUserId){
             setMessages(prev => ([...prev, { ...messageData }]))
+            // console.log(messages);
+            
             }
         }
 
@@ -141,7 +144,7 @@ const Chat = () => {
             })
         }
 
-        console.log(e.target.files)
+        // console.log(e.target.files) 
 
     }
 
@@ -150,7 +153,7 @@ const Chat = () => {
 
     const uniqueMessages = uniqBy(messages, '_id')
 
-    console.log(onlinePeople)
+    // console.log(onlinePeople)
 
 
     return (

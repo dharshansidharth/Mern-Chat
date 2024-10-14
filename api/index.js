@@ -128,7 +128,7 @@ app.post('/register', async (req, res) => {
         const hashedPassword = bcrypt.hashSync(password, bcryptSalt)
 
         const createdUser = await user.create({ username: username, password: hashedPassword })
-        console.log(createdUser)
+        // console.log(createdUser)
         jwt.sign({ userId: createdUser._id, username }, jwtSecret, {}, (err, token) => {
             if (err) { throw err }
             res.cookie('token', token, { sameSite: 'none', secure: true }).status(201).json({
@@ -186,7 +186,7 @@ wss.on('connection', (connection, req) => {
         clearTimeout(connection.deathTimer)
     })
 
-
+    // read username and id from cookie for this message
     const cookies = req.headers.cookie
     if (cookies) {
         const tokenCookieString = cookies.split(';').find((str) => str.startsWith('token='))
@@ -213,15 +213,16 @@ wss.on('connection', (connection, req) => {
 
     connection.on('message', async (message) => {
         const messageData = JSON.parse(message.toString())
+        // console.log(messageData)
         const { recipient, text , file} = messageData
         let filename = ''
         if(file){
-            console.log({file})
+            // console.log({file})
             const parts = file.name.split('.')
             const ext = parts[parts.length - 1]
             filename = Date.now().toString() + '.' + ext
             const path = __dirname + '/uploads/' + filename
-            console.log(file.data)
+            // console.log(file.data)
             const bufferData = new Buffer(file.data.split(',')[1] , 'base64')
             fs.writeFile(path , bufferData , () => {
                 console.log('file saved ' + path)
@@ -234,7 +235,7 @@ wss.on('connection', (connection, req) => {
                 text,
                 file: file ? filename : null
             });  
-            console.log(messageDoc);    
+            // console.log(messageDoc);    
             [...wss.clients]
                 .filter(c => c.userId === recipient)
                 .forEach(c => c.send(JSON.stringify({
